@@ -140,7 +140,7 @@ def profile():
     q_=ticket.query.filter_by(user_id=current_user.id).all()
     #User requested that were accepted
     a=accepted_requests.query.filter_by(exchange_with_id=current_user.id).all()
-    #User requested that were denied
+    #User requested by others that were denied
     d=denied_requests.query.filter_by(exchange_with_id=current_user.id).all()
     #User requested for but got accpeted
     a_=accepted_requests.query.filter_by(user_id=current_user.id).all()
