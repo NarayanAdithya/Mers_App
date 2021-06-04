@@ -40,7 +40,7 @@ def register():
         flash('Successfully Registered',category="success")
         print(form.password.data)
         return redirect(url_for('home'))
-    return render_template('registration.html',form=form,title='Register')
+    return render_template('regis.html',form=form,title='Register')
 
 
 @app.route('/contactus')
