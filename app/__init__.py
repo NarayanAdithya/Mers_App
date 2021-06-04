@@ -23,7 +23,7 @@ db=SQLAlchemy(app,session_options={"autoflush": False})
 migrate=Migrate(app,db,render_as_batch=True)
 
 from app import routes,models
-from app.models import User,train,ticket,requests_
+from app.models import User,train,ticket,requests_,accepted_requests,denied_requests
 
 #FLASK ADMIN SETTINGS
 from flask_admin import Admin
@@ -37,3 +37,5 @@ admin.add_view(ModelView(User,db.session))
 admin.add_view(ModelView(train,db.session))
 admin.add_view(ModelView(ticket,db.session))
 admin.add_view(ModelView(requests_,db.session))
+admin.add_view(ModelView(accepted_requests,db.session))
+admin.add_view(ModelView(denied_requests,db.session))

@@ -23,6 +23,8 @@ class User(UserMixin,db.Model):
     gender=db.Column(db.String(5))
     tickets=db.relationship('ticket',backref='user_details',lazy='dynamic')
     requests_made=db.relationship('requests_',backref='request_made_by',lazy='dynamic')
+    accepted_requests=db.relationship('accepted_requests',backref='user_accepted_details',lazy='dynamic')
+    denied_requests=db.relationship('denied_requests',backref='user_denied_details',lazy='dynamic')
     def __repr__(self):
         return '<User:{} Id:{}>'.format(self.username,self.id)
     def set_password(self,password):
@@ -49,7 +51,9 @@ class ticket(db.Model):
     status=db.Column(db.String(10))
     no_of_passenger=db.Column(db.Integer,default=1)
     train_no=db.Column(db.Integer,db.ForeignKey('train.id'))
-    applied_requests=db.relationship('requests_',backref='ticker_details',lazy='dynamic')
+    applied_requests=db.relationship('requests_',backref='ticket_details',lazy='dynamic')
+    accepted_requests=db.relationship('accepted_requests',backref='ticket_accepted_details',lazy='dynamic')
+    denied_requests=db.relationship('denied_requests',backref='ticket_denied_details',lazy='dynamic')
     def __repr__(self):
         return '<Train Number:{} User:{} Seat:{}>'.format(self.train_no,self.user_details.username,self.seat_details)
 
@@ -63,6 +67,34 @@ class requests_(db.Model):
     exchange_with_id=db.Column(db.Integer)
     def __repr__(self):
         return '<P1:{} change with P2:{}>'.format(self.ticket_id,self.exchange_with_id)
+
+class accepted_requests(db.Model):
+    __tablename__='accepted_requests'
+    id=db.Column(db.Integer,primary_key=True)
+    user_id=db.Column(db.Integer,db.ForeignKey('user.id'))
+    ticket_id=db.Column(db.Integer,db.ForeignKey('ticket.id'))
+    req_status=db.Column(db.String(10))
+    preference=db.Column(db.String(15))
+    exchange_with_id=db.Column(db.Integer)
+    from_seat_details=db.Column(db.String(15))
+    to_seat_details=db.Column(db.String(15))
+    def __repr__(self):
+        return '< Accepted P1:{} change with P2:{}>'.format(self.ticket_id,self.exchange_with_id)
+
+
+class denied_requests(db.Model):
+    __tablename__='denied_requests'
+    id=db.Column(db.Integer,primary_key=True)
+    user_id=db.Column(db.Integer,db.ForeignKey('user.id'))
+    ticket_id=db.Column(db.Integer,db.ForeignKey('ticket.id'))
+    req_status=db.Column(db.String(10))
+    preference=db.Column(db.String(15))
+    exchange_with_id=db.Column(db.Integer)
+    from_seat_details=db.Column(db.String(15))
+    to_seat_details=db.Column(db.String(15))
+    def __repr__(self):
+        return '< Denied P1:{} change with P2:{}>'.format(self.ticket_id,self.exchange_with_id)
+
 
 def create_sample_instances():
     r=User(username='Adithya Narayan',email='adithyanarayan1234@gmail.com',aadhar="856734445656",mobile_number="9048338928",pincode="673008",age=19,gender="Male")

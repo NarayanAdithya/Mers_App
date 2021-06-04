@@ -1,7 +1,7 @@
 from app import app,db
 from flask import request,redirect,url_for,render_template,flash,get_flashed_messages,jsonify
 from flask_login import current_user,login_user,logout_user,login_required
-from app.models import User,ticket,train,requests_
+from app.models import User,ticket,train,requests_,accepted_requests,denied_requests
 from app.forms import LoginForm,RegisterForm
 from werkzeug.urls import url_parse
 from wtforms.validators import ValidationError
@@ -80,7 +80,7 @@ def seatchange():
             return "No exchange possible please wait"
         possible=[]
         for i in ticket_preferable:
-            if(i.seat_details[-2:]==berth):
+            if(i.seat_details[-2:]==berth and i.user_id!=current_user.id):
                 possible.append(i)
         if possible is None:
             for i in ticket_preferable:
@@ -90,7 +90,7 @@ def seatchange():
         if possible:
             return render_template('allrequests.html',possible=possible,T=t)
         else:
-            return "error"
+            return render_template('allrequests.html',possible=possible,T=t)
     return render_template('seat.html')
 
 @app.route('/render_requests/<int:tic>/<int:ticket2>/',methods=['GET','POST'])
@@ -100,24 +100,11 @@ def req(tic,ticket2):
     print(i)
     print(j)
     all_requests=requests_.query.filter_by(ticket_id=j).all()
-    if all_requests is None:
+    if all_requests is None or len(all_requests)==0:
         t=ticket.query.filter_by(id=tic).first()
         r=requests_(user_id=current_user.id,ticket_id=j,req_status="WAIT",preference=t.seat_details,exchange_with_id=i)
         db.session.add(r)
         db.session.commit()
-    elif(len(all_requests)>0):
-        f=0
-        for i in all_requests:
-            if i.req_status=='CONF' or i.req_status=='DNY':
-               pass 
-            else:
-                f=1
-        if(f!=1):
-            t=ticket.query.filter_by(id=tic).first()
-            r=requests_(user_id=current_user.id,ticket_id=j,req_status="WAIT",preference=t.seat_details,exchange_with_id=i)
-            db.session.add(r)
-            db.session.commit()
-
     else:
         flash('A request on the ticket already exists',category='danger')
         return redirect(url_for('home'))
@@ -145,10 +132,21 @@ def login():
 
 @app.route('/profile',methods=['GET','POST'])
 def profile():
+    #User requested
     r=requests_.query.filter_by(user_id=current_user.id).all()
+    #Requested to the user
     r_=requests_.query.filter_by(exchange_with_id=current_user.id).all()
+    #Tickets
     q_=ticket.query.filter_by(user_id=current_user.id).all()
-    return render_template('profile.html',r=r,r_=r_,q_=q_)
+    #User requested that were accepted
+    a=accepted_requests.query.filter_by(exchange_with_id=current_user.id).all()
+    #User requested that were denied
+    d=denied_requests.query.filter_by(exchange_with_id=current_user.id).all()
+    #User requested for but got accpeted
+    a_=accepted_requests.query.filter_by(user_id=current_user.id).all()
+    #User requested for but got denied
+    d_=denied_requests.query.filter_by(user_id=current_user.id).all()
+    return render_template('profile.html',r=r,r_=r_,q_=q_,a_=a_,d_=d_,a=a,d=d)
 
 @app.route('/accept/<int:req>',methods=['GET','POST'])
 def accept(req):
@@ -158,13 +156,15 @@ def accept(req):
     r.req_status="CONF"
     p=r.exchange_with_id
     adi_ticket=ticket.query.filter_by(user_id=p).first()
-    lim_ticket=r.ticker_details
+    lim_ticket=r.ticket_details
     temp=adi_ticket.seat_details
     adi_ticket.seat_details=lim_ticket.seat_details
     lim_ticket.seat_details=temp
     db.session.add(adi_ticket)
     db.session.add(lim_ticket)
-    db.session.add(r)
+    accepted_req=accepted_requests(user_id=r.user_id,ticket_id=r.ticket_id,req_status=r.req_status,preference=adi_ticket.seat_details,exchange_with_id=r.exchange_with_id,from_seat_details=adi_ticket.seat_details,to_seat_details=lim_ticket.seat_details)
+    db.session.add(accepted_req)
+    db.session.delete(r)
     db.session.commit()
     r=requests_.query.filter_by(user_id=current_user.id).all()
     r_=requests_.query.filter_by(exchange_with_id=current_user.id).all()
@@ -177,7 +177,12 @@ def deny(req):
     if(r.exchange_with_id!=current_user.id):
         flash("Error",category='danger')
     r.req_status="DNY"
-    db.session.add(r)
+    p=r.exchange_with_id
+    adi_ticket=ticket.query.filter_by(user_id=p).first()
+    lim_ticket=r.ticket_details
+    denied_req=denied_requests(user_id=r.user_id,ticket_id=r.ticket_id,req_status=r.req_status,preference=r.preference,exchange_with_id=r.exchange_with_id,from_seat_details=adi_ticket.seat_details,to_seat_details=lim_ticket.seat_details)
+    db.session.add(denied_req)
+    db.session.delete(r)
     db.session.commit()
     r=requests_.query.filter_by(user_id=current_user.id).all()
     r_=requests_.query.filter_by(exchange_with_id=current_user.id).all()
