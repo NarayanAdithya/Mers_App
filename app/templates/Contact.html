@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>MERS</title>
+    <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aguafina+Script">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="static/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="static/assets/css/Contact-Form-v2-Modal--Full-with-Google-Map.css">
+    <link rel="stylesheet" href="static/assets/css/Features-Boxed.css">
+    <link rel="stylesheet" href="static/assets/css/Footer-Basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="static/assets/css/Login-Form-Dark.css">
+    <link rel="stylesheet" href="static/assets/css/PHP-Contact-Form-dark-1.css">
+    <link rel="stylesheet" href="static/assets/css/PHP-Contact-Form-dark.css">
+    <link rel="stylesheet" href="static/assets/css/Registration-Form-with-Photo.css">
+    <link rel="stylesheet" href="static/assets/css/Team-Grid.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-blue w-65 aos-init aos-animate" data-aos="fade-left" data-aos-delay="100" style="background-color:   #484848;">
+        <a class="navbar-brand" href="{{url_for('home')}}">
+  
+    <h2>MERS</h2>
+
+    </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            {% if current_user.is_authenticated %}
+            <li class="nav-item ">
+              <a class="nav-link" href="{{url_for('profile')}}">Hey,{{current_user.username[:3]}} </a>
+            </li>
+            {%endif%}
+            <li class="nav-item ">
+              <a class="nav-link" href="{{url_for('home')}}">Home </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('seatchange')}}">Seat Shift</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('chatpage')}}">Forum</a>
+            </li>
+            
+           
+            {% if current_user.is_anonymous %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('register')}}">SignIn/SignUp</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('logout')}}">SignOut</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+      <br>
+      <br>
+      {% with messages=get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {%for category,message in messages%}
+        <br>
+        <br>
+        <div class="container">
+          <div class="alert alert-{{category}} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close" name="button"><span aria-hidden="true">&times;</span></button>
+            {{message}}
+          </div>
+        </div>
+    
+        {%endfor%}
+      {%endif%}
+      {%endwith%}
+    
+    <br>
+    <div>
+
+    <div id="contact" style="text-decoration-color: white;">
+        <div class="container">
+            <div class="intro">
+                <br>
+                <br>
+                <h2>Contact us</h2>
+                <p>For queries contact the MERS team</p>
+            </div>
+            <form id="contact-form" action="static/assets/php/contact.php" method="post">
+                <div class="messages"></div>
+                <div class="controls">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group"><label for="form_name">Your Name* </label><input class="form-control" type="text" id="form_name" data-error="Vorname erforderlich." name="name" required="" placeholder="Enter your Firstname*">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group"><label for="form_lastname">Lastname* </label><input class="form-control" type="text" id="form_lastname" data-error="Nachname erforderlich." name="lastname" required="" placeholder="Enter your Lastname*">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group"><label for="form_email">E-Mail* </label><input class="form-control" type="email" id="form_email" data-error="Vorname erforderlich." name="email" required="" placeholder="Enter your E-mail ID*">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"><label for="form_phone">Phone No. </label><input class="form-control" type="number" id="form_phone" data-error="Telefonnummer erforderlich" name="phone" placeholder="Enter your Phone Numer*">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <div class="form-group"><label for="form_message">Address* </label><input class="form-control" type="text" id="form_message" data-error="Nachricht erforderlich." rows="4" name="message" required="" placeholder="Enter your Address*">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="col-md-12"><button class="btn btn-success btn-send" value="Senden" type="submit" style="margin-top: 10px;margin-bottom: 40px;">SEND</button></div>
+                    <br>
+                    <br>
+                </div>
+            </form>
+        </div>
+    </div>
+   
+    <footer class="footer-basic" >
+        <div class="social" data-bss-hover-animate="pulse" ><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat" ></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+        <ul class="list-inline" data-bss-hover-animate="pulse">
+            <li class="list-inline-item"><a href="index.html">Home</a></li>
+            <li class="list-inline-item"><a href="index.html/#services">Services</a></li>
+            <li class="list-inline-item"><a href="#">About</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+        </ul>
+        <p class="copyright">© Aravind 2021</p>
+    </footer>
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="static/assets/js/stylish-portfolio.js"></script>
+    <script src="static/assets/js/Contact-Form-v2-Modal--Full-with-Google-Map.js"></script>
+    <script src="static/assets/js/PHP-Contact-Form-dark-1.js"></script>
+    <script src="static/assets/js/PHP-Contact-Form-dark.js"></script>
+</body>
+
+</html>

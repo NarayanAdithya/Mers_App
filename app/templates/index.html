@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>MERS</title>
+    <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aguafina+Script">
+    <link rel="stylesheet" href="static/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="static/assets/css/Features-Boxed.css">
+    <link rel="stylesheet" href="static/assets/css/Footer-Basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="static/assets/css/Login-Form-Dark.css">
+    <link rel="stylesheet" href="static/assets/css/Registration-Form-with-Photo.css">
+    <link rel="stylesheet" href="static/assets/css/Team-Grid.css">
+</head>
+
+<body id="page-top"><a data-bss-hover-animate="pulse" class="menu-toggle rounded" href="#"><i class="fa fa-bars"></i></a>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-blue w-65 aos-init aos-animate" data-aos="fade-left" data-aos-delay="100" style="background-color:   #484848;">
+        <a class="navbar-brand" href="{{url_for('home')}}">
+  
+    <h2>MERS</h2>
+
+    </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            {% if current_user.is_authenticated %}
+        <li class="nav-item ">
+          <a class="nav-link" href="{{url_for('profile')}}">Hey,{{current_user.username[:3]}} </a>
+        </li>
+        {%endif%}
+            <li class="nav-item ">
+              <a class="nav-link" href="{{url_for('home')}}">Home </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('seatchange')}}">Seat Shift</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('chatpage')}}">Forum</a>
+            </li>
+            
+        
+            {% if current_user.is_anonymous %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('register')}}">SignIn/SignUp</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('logout')}}">SignOut</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+      <br>
+      <br>
+      {% with messages=get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {%for category,message in messages%}
+        <br>
+        <br>
+        <div class="container">
+          <div class="alert alert-{{category}} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close" name="button"><span aria-hidden="true">&times;</span></button>
+            {{message}}
+          </div>
+        </div>
+    
+        {%endfor%}
+      {%endif%}
+      {%endwith%}
+    
+    <header class="d-flex masthead" style="background-image: url('static/assets/img/trainbg.jpg');">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6 col-md-5 col-lg-4 item" style="filter: grayscale(100%) invert(2%);width: 1141px;">
+            <h1 data-bss-hover-animate="pulse" class="mb-1" style="color: var(--light)">MERS</h1>
+            <h3 class="mb-5"><em data-bss-hover-animate="pulse" style="color: white">Modified E-Railway System</em></h3>
+            <p style="color: var(--light);; font-weight: bold">Tired of Booking Train Tickets? MERS is here with a solution for Fast and Efficient E-Rail Booking</p>
+            <a class="btn btn-primary btn-xl js-scroll-trigger" role="button" data-bss-hover-animate="pulse" href="#services" style="color: white">Find Out More</a>
+            <div class="overlay"></div>
+            </div>
+
+      
+             <div class="col-sm-6 col-md-5 col-lg-4 item">
+                <section class="login-dark">
+            <form class="pulse animated" method="post">
+                <h2 class="sr-only">Ticket Form</h2>
+                <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
+                <h3 class="text-center">Enter Ticket Details</h3>
+                <div class="form-group" data-bss-hover-animate="pulse"><input class="form-control" type="text" name="pnr" placeholder="PNR Number"></div>
+                <div class="form-group" data-bss-hover-animate="pulse"><button class="btn btn-primary btn-block" type="submit"><a class="forgot" >Check Details</a></button>
+            </form>
+        </section>
+                        
+                    </div>        
+        </div>
+    </div>
+
+    </header>
+    <!--<section class="bg-light content-section" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h2 data-bss-hover-animate="pulse">Stylish Portfolio is the perfect theme for your next project!</h2>
+                    <p class="lead mb-5"><span data-bss-hover-animate="pulse">This theme features a flexible, UX friendly sidebar menu and stock photos from our friends at&nbsp;</span><a href="https://unsplash.com/">Unsplash</a><span>!</span></p><a class="btn btn-dark btn-xl js-scroll-trigger" role="button" data-bss-hover-animate="pulse" href="#services" style="transform: rotate(0deg);">What We Offer</a>
+                </div>
+            </div>
+        </div>
+    </section>-->
+    <section class="text-center text-white bg-primary content-section" id="services">
+        <div class="container">
+            <div class="content-section-heading">
+                <h3 class="text-secondary mb-0" data-bss-hover-animate="pulse">Services</h3>
+                <h2 data-bss-hover-animate="pulse" class="mb-5">What We Offer</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0" data-bss-hover-animate="pulse"><span class="mx-auto service-icon rounded-circle mb-3" data-bss-hover-animate="pulse"><a href="https://www.irctc.co.in/nget/train-search"><i class="fas fa-train"></i></a></span>
+                    <h4><strong>Ticket Booking</strong></h4>
+                    <p class="mb-0 text-faded">Train Ticket Booking using IRCTC</p>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0" data-bss-hover-animate="pulse"><span class="mx-auto service-icon rounded-circle mb-3"><a href="{{url_for('seatchange')}}"><i class="fa fa-send" data-bss-hover-animate="pulse"></i></a></span></span>
+                    <h4><strong>Seat Shift</strong></h4>
+                    <p class="mb-0 text-faded">Not happy with the present seat reservation? Apply for seat shift!!</p>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0" data-bss-hover-animate="pulse"><span class="mx-auto service-icon rounded-circle mb-3"><a href="{{url_for('contact')}}"><i class="fas fa-phone"></i></a></span>
+                    <h4><strong>Contact</strong></h4>
+                    <p class="mb-0 text-faded"><span></span><span>Customized privileged Chat room for private contact!</span></p>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0" data-bss-hover-animate="pulse"><span class="mx-auto service-icon rounded-circle mb-3"><a href="{{url_for('chatpage')}}"><i class="fas fa-question"></i></a></span>
+                    <h4><strong>Question</strong></h4>
+                    <p class="mb-0 text-faded">Ask your queries here! We will get back to you in no time!</p>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+    <section id="Features" class="features-boxed" style="background: var(--gray-dark);">
+            <div class="container">
+                <div class="intro">
+                    <h2 class="text-center" style="color: var(--white);">Features </h2>
+                    <p class="text-center" style="color: var(--white);">MERS provide you various features to make the process of E-Rail booking smart and pleasurable!</p>
+                </div>
+                <div class="row justify-content-center features">
+                    <div class="col-sm-6 col-md-5 col-lg-4 item">
+                        <div data-bss-hover-animate="pulse" class="box"><i class="fa fa-map-marker icon"></i>
+                            <h3 class="name">Works everywhere</h3>
+                            <p class="description">The platform is availbale throughout India and accessible to everyone across the country.</p><a class="learn-more" href="#">Learn more »</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5 col-lg-4 item">
+                        <div data-bss-hover-animate="pulse" class="box"><i class="fa fa-clock-o icon"></i>
+                            <h3 class="name">Always available</h3>
+                            <p class="description">MERS is unique and is available 24x7 for 365 days serving and creating happiness!</p><a class="learn-more" href="#">Learn more »</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5 col-lg-4 item">
+                        <div data-bss-hover-animate="pulse" class="box"><i class="fa fa-list-alt icon"></i>
+                            <h3 class="name">Customizable </h3>
+                            <p class="description">Contact us, the team of MERS and help us to improve ourselves</p><a class="learn-more" href="#">Learn more »</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5 col-lg-4 item">
+                        <div data-bss-hover-animate="pulse" class="box"><i class="fa fa-leaf icon"></i>
+                            <h3 class="name">Natural </h3>
+                            <p class="description">MERS is one of a kind platform and has its own natural features for an efficient E-booking system.</p><a class="learn-more" href="#">Learn more »</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5 col-lg-4 item">
+                        <div data-bss-hover-animate="pulse" class="box"><i class="fa fa-plane icon"></i>
+                            <h3 class="name">Fast </h3>
+                            <p class="description">The unique algorthm of MERS makes it fast and efficient for its users to ease the process of E-Booking.</p><a class="learn-more" href="#">Learn more »</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5 col-lg-4 item">
+                        <div data-bss-hover-animate="pulse" class="box"><i class="fa fa-phone icon"></i>
+                            <h3 class="name">Mobile-first</h3>
+                            <p class="description">Our Mobile friendly approach allows users to acces MERS from anywhere, everywhere with ease!.</p><a class="learn-more" href="#">Learn more »</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <section id="portfolio" class="content-section">
+        <div class="container" >
+            <div class="text-center content-section-heading">
+                <h3 class="text-secondary mb-0">Gallery</h3>
+                <h2 class="mb-5">Recent Activities</h2>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-lg-6"><a class="portfolio-item" href="#">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <h2>Trekking</h2>
+                                <p class="mb-0">A vibing journey through the Dense forests of Northeastern India</p>
+                            </div>
+                        </div><img class="img-fluid" src="static/assets/img/train9.jpg" style="height: 363px; width: 700px;">
+                    </a></div>
+                <div class="col-lg-6"><a class="portfolio-item" href="#">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <h2>Valley</h2>
+                                <p class="mb-0">A proudful journey through the Aravali range of Northwestern India</p>
+                            </div>
+                        </div><img class="img-fluid" src="static/assets/img/train5.jpg">
+                    </a></div>
+                <div class="col-lg-6"><a class="portfolio-item" href="#">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <h2>Luxury</h2>
+                                <p class="mb-0">Experience the luxurious journey through Fisrt class Maharaja express throughout India</p>
+                            </div>
+                        </div><img class="img-fluid" src="static/assets/img/train6.jpg">
+                    </a></div>
+                <div class="col-lg-6"><a class="portfolio-item" href="#">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <h2>Hills</h2>
+                                <p class="mb-0">A pleasure journey through the Western Ghats of South India.</p>
+                            </div>
+                        </div><img class="img-fluid" src="static/assets/img/train8.jpg" style="height: 311px; width: 700px;">
+                    </a></div>
+            </div>
+        </div>
+    </section>
+    <!--<section class="text-white bg-primary content-section">
+
+        <div class="container text-center" style="filter: grayscale(0%);">
+            <h2 class="mb-4">The buttons below are impossible to resist..</h2><a class="btn btn-light btn-xl mr-4" role="button" href="#">Click Me!</a><a class="btn btn-dark btn-xl mr-4" role="button" href="#" style="color: var(--dark);filter: grayscale(94%);">Look at Me</a>
+        </div>
+    </section>-->
+
+    <footer class="text-center footer" style="background-color: #D0D0D0">
+        <div class="container">
+            <ul class="list-inline mb-5" style="filter: grayscale(100%);">
+                <li class="list-inline-item">&nbsp;<a class="text-white social-link rounded-circle" data-bss-hover-animate="pulse" href="#"><i class="icon-social-facebook"></i></a></li>
+                <li class="list-inline-item">&nbsp;<a class="text-white social-link rounded-circle" data-bss-hover-animate="pulse" href="#"><i class="icon-social-twitter"></i></a></li>
+                <li class="list-inline-item">&nbsp;<a class="text-white social-link rounded-circle" data-bss-hover-animate="pulse" href="#"><i class="icon-social-github"></i></a></li>
+            </ul>
+            <ul class="list-inline">
+            <li class="list-inline-item"><a href="index.html">Home</a></li>
+            <li class="list-inline-item"><a href="#services">Services</a></li>
+            <li class="list-inline-item"><a href="#Features">Features</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+        </ul>
+            <p class="text-muted mb-0 small">Copyright &nbsp;© Aravind 2021</p>
+        </div><a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a>
+    </footer>
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="static/assets/js/stylish-portfolio.js"></script>
+</body>
+
+</html>

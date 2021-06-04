@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/assets/css/Footer-Basic.css">
+    <link rel="stylesheet" href="static/assets/css/custom.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>DT2</title>
+    <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aguafina+Script">
+    <link rel="stylesheet" href="static/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="static/assets/css/Features-Boxed.css">
+    <link rel="stylesheet" href="static/assets/css/Footer-Basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    
+    <link rel="stylesheet" href="static/assets/css/Registration-Form-with-Photo.css">
+    
+  </head>
+  <body style="background: var(--gray);">
+	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-blue w-65 aos-init aos-animate" data-aos="fade-left" data-aos-delay="100" style="background-color:   #484848;">
+        <a class="navbar-brand" href="{{url_for('home')}}">
+  
+    <h2>MERS</h2>
+
+    </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+
+			{% if current_user.is_authenticated %}
+        <li class="nav-item ">
+          <a class="nav-link" href="{{url_for('home')}}">Hey,{{current_user.username[:3]}} </a>
+        </li>
+        {%endif%}
+            <li class="nav-item ">
+              <a class="nav-link" href="{{url_for('home')}}">Home </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('seatchange')}}">Seat Shift</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('chatpage')}}">Forum</a>
+            </li>
+         
+            {% if current_user.is_anonymous %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('register')}}">SignIn/SignUp</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('logout')}}">SignOut</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+	  <br>
+	  <br>
+      <br><br>
+      <div class="container">
+        <br><br>
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#home" style="color: white;font-size: 30px;">Requests</a></li>
+          <li style="margin-right: 30px;margin-left: 30px;color:thistle;font-size: 30px;"><a data-toggle="tab" href="#menu1" style="color: white;">Applied Requests</a></li>
+          <li style="margin-right: 30px;margin-left: 30px;color:thistle;font-size: 30px;"><a data-toggle="tab" href="#menu2" style="color: white;">My Tickets</a></li>
+
+        </ul>
+      
+        <div class="tab-content">
+          <div id="home" class="tab-pane fade in active">
+            <h3>Your Requests</h3>
+            
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Current Seat</th>
+                  <th scope="col">Exchange to Seat</th>
+                  <th scope="col">Accept</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%if r_%}
+                {%for i in r_%}
+                {%if i.req_status!="CONF"%}
+                <tr>
+                  <th scope="row">{{loop.index}}</th>
+                  <td>{{i.preference}}</td>
+                  <td>{{i.ticker_details.seat_details}}</td>
+                  <td><a href="{{url_for('accept',req=i.id)}}" style="color: green;">Accept</a>|<a href="{{url_for('deny',req=i.id)}}" style="color: red;">Deny</a></td>
+                </tr>
+                {%elif i.req_status=='CONF'%}
+                <tr>
+                  <th scope="row">{{loop.index}}</th>
+                  <td>{{i.ticker_details.seat_details}}</td>
+                  <td>{{i.preference}}</td>
+                  <td>You Accepted</td>
+                </tr>
+                {%else%}
+                <tr>
+                  <th scope="row">{{loop.index}}</th>
+                  <td>{{i.ticker_details.seat_details}}</td>
+                  <td>{{i.preference}}</td>
+                  <td>You Denied</td>
+                </tr>
+                {%endif%}
+                {%endfor%}
+                {%endif%}
+              </tbody>
+            </table>
+          </div>
+          <div id="menu1" class="tab-pane fade">
+            <h3>Applied Requests</h3>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Current Seat</th>
+                  <th scope="col">Requested Seat</th>
+                  <th scope="col">PNR</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%if r%}
+                {%for i in r%}
+                <tr>
+                  <th scope="row">{{loop.index}}</th>
+                  <td>{{i.ticker_details.seat_details}}</td>
+                  <td>{{i.preference}}</td>
+                  <td>{{i.ticker_details.pnr_number}}</td>
+                  <td>{{i.req_status}}</td>
+                </tr>
+                {%endfor%}
+                {%endif%}
+              </tbody>
+            </table>
+          </div>
+          <div id="menu2" class="tab-pane fade">
+            <h3>My Tickets</h3>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Seat Details</th>
+                  <th scope="col">Train Number</th>
+                  <th scope="col">PNR</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                {%if q_%}
+                {%for i in q_%}
+                <tr>
+                  <th scope="row">{{loop.index}}</th>
+                  <td>{{i.seat_details}}</td>
+                  <td>{{i.train_no}}</td>
+                  <td>{{i.pnr_number}}</td>
+                </tr>
+                {%endfor%}
+                {%endif%}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  </body>
+  <br>
+  <br>
+  <br>
+  <br><br><br><br><br><br><br>
+
+  <footer class="footer-basic">
+        <div class="social" data-bss-hover-animate="pulse" ><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat" ></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+        <ul class="list-inline" data-bss-hover-animate="pulse">
+            <li class="list-inline-item"><a href="index.html">Home</a></li>
+            <li class="list-inline-item"><a href="index.html/#services">Services</a></li>
+            <li class="list-inline-item"><a href="#">About</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+        </ul>
+        <p class="copyright">© Aravind 2021</p>
+    </footer>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/0.12.14/vue.min.js'></script>
+  <script src="static/assets/js/jquery.min.js"></script>
+    <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="static/assets/js/stylish-portfolio.js"></script>
+</html>
